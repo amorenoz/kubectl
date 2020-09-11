@@ -880,7 +880,7 @@ func TestCheckUDPPort(t *testing.T) {
 			expectError: true,
 		},
 		{
-			name: "Pod has ports with both TCP and UDP protocol",
+			name: "Pod has ports with both TCP and UDP protocol (UDP first)",
 			pod: &corev1.Pod{
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
@@ -888,6 +888,22 @@ func TestCheckUDPPort(t *testing.T) {
 							Ports: []corev1.ContainerPort{
 								{Protocol: corev1.ProtocolUDP, ContainerPort: 53},
 								{Protocol: corev1.ProtocolTCP, ContainerPort: 53},
+							},
+						},
+					},
+				},
+			},
+			ports: []string{":53"},
+		},
+		{
+			name: "Pod has ports with both TCP and UDP protocol (TCP first)",
+			pod: &corev1.Pod{
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{
+						{
+							Ports: []corev1.ContainerPort{
+								{Protocol: corev1.ProtocolTCP, ContainerPort: 53},
+								{Protocol: corev1.ProtocolUDP, ContainerPort: 53},
 							},
 						},
 					},
